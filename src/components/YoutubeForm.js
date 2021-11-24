@@ -22,11 +22,18 @@ const validate = (values) => {
     errors.channel = 'Channel name must be three characters long.';
   return errors;
 };
+const validateSchema = Yup.object({
+  name: Yup.string().required('Name is required'),
+  email: Yup.string().email('Invalid email').required('required'),
+  channel: Yup.string().required(),
+});
 function YoutubeForm(props) {
   const formik = useFormik({
     initialValues,
     onSubmit,
-    validate,
+    // validateSchema,
+    validationSchema: validateSchema,
+    // validate: validateSchema,
   });
   console.log('form.errors', formik.errors);
   console.log('onBlur', formik.touched);
