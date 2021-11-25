@@ -14,7 +14,9 @@ const onSubmit = (values) => {
 const validateSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('required'),
-  channel: Yup.string().required(),
+  channel: Yup.string()
+    .required('Channel name is required')
+    .min(4, 'Min length should be at least 4'),
 });
 function YoutubeForm() {
   return (
