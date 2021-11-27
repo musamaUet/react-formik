@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import TextError from './TextError';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -8,6 +9,10 @@ const initialValues = {
   channel: '',
   comment: '',
   address: '',
+  social: {
+    facebook: '',
+    twitter: '',
+  },
 };
 const onSubmit = (values) => {
   console.log('formSubmit Data ==>', values);
@@ -15,7 +20,11 @@ const onSubmit = (values) => {
 
 const validateSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  email: Yup.string().email('Invalid email').required('required'),
+  email: Yup.string()
+    .email('invalid email')
+    .required('email is required')
+    .max(25)
+    .label('This Email'),
   channel: Yup.string()
     .required('Channel name is required')
     .min(4, 'Min length should be at least 4'),
@@ -32,12 +41,16 @@ function YoutubeForm() {
         <div className='form-control'>
           <label htmlFor='name'>Name</label>
           <Field type='text' name='name' id='name' />
-          <ErrorMessage name='name' />
+          <ErrorMessage name='name' component={TextError} />
         </div>
         <div className='form-control'>
           <label htmlFor='password'>E-mail</label>
           <Field type='email' name='email' id='email' />
-          <ErrorMessage name='email' />
+          <ErrorMessage name='email'>
+            {(errMsg) => {
+              return <div className='error'>{errMsg}</div>;
+            }}
+          </ErrorMessage>
         </div>
         <div className='form-control'>
           <label htmlFor='channel'>Channel</label>
@@ -71,6 +84,14 @@ function YoutubeForm() {
               );
             }}
           </Field>
+        </div>
+        <div className='form-control'>
+          <label htmlFor='facebook' />
+          <Field type='text' id='facebook' name='social.facebook' />
+        </div>
+        <div className='form-control'>
+          <label htmlFor='twitter' />
+          <Field type='text' id='twitter' name='social.twitter' />
         </div>
         <button type='submit'>Submit</button>
       </Form>
